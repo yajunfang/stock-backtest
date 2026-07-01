@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Downloaded data (regenerated via build_data.py)
+# Keep 600519.js as demo, ignore others
+data/*.json
+data/*.js
+!data/600519.js
