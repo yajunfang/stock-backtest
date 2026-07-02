@@ -58,6 +58,12 @@ body::before {
   background: rgba(11, 15, 25, 0.8);
   backdrop-filter: blur(20px);
 }
+.header-icon {
+  font-size: 2rem;
+  margin-right: 6px;
+  display: inline-block;
+  -webkit-text-fill-color: initial;
+}
 .header-title {
   font-size: 1.6rem;
   font-weight: 800;
@@ -106,7 +112,7 @@ body::before {
 .input-group { flex: 1; min-width: 200px; position: relative; }
 .input-label {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-muted);
   margin-bottom: 6px;
@@ -188,7 +194,7 @@ body::before {
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
 }
 .section-label {
-  font-size: 0.78rem; font-weight: 700; color: var(--text-secondary);
+  font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);
   white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .section-label small { font-weight: 400; color: var(--text-muted); }
@@ -228,10 +234,11 @@ body::before {
   background: rgba(99,102,241,0.1);
   box-shadow: 0 0 0 1px var(--accent), 0 4px 20px var(--accent-glow);
 }
-.strategy-btn .strategy-icon { font-size: 1.5rem; }
+.strategy-btn .strategy-icon { font-size: 1.8rem; color: #e2e8f0; text-shadow: 0 0 8px rgba(255,255,255,0.2); }
 .strategy-btn .strategy-name { font-size: 0.82rem; font-weight: 700; color: var(--text-primary); }
 .strategy-btn .strategy-brief { font-size: 0.7rem; color: var(--text-muted); }
 .strategy-btn.active .strategy-name { color: #a5b4fc; }
+.strategy-btn.active .strategy-icon { color: #e2e8f0; text-shadow: 0 0 10px rgba(165,180,252,0.5); }
 
 /* Strategy explanation */
 .strategy-explanation {
@@ -239,7 +246,7 @@ body::before {
   background: rgba(99,102,241,0.06);
   border: 1px solid rgba(99,102,241,0.2);
   border-radius: var(--radius-sm);
-  font-size: 0.82rem; color: #a5b4fc;
+  font-size: 0.9rem; color: #a5b4fc;
   line-height: 1.6;
 }
 
@@ -254,7 +261,7 @@ body::before {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 10px; flex-wrap: wrap; gap: 8px;
 }
-.chart-title { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); }
+.chart-title { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
 .chart-toggle { display: flex; gap: 0; }
 .chart-type-btn {
   padding: 6px 16px; border: 1px solid var(--border);
@@ -266,6 +273,28 @@ body::before {
 .chart-type-btn:last-child { border-radius: 0 var(--radius-xs) var(--radius-xs) 0; }
 .chart-type-btn.active {
   background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* BOLL button */
+#bollingerBtn {
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#bollingerBtn:hover { border-color: #f59e0b; color: #f59e0b; }
+#bollingerBtn.active {
+  background: rgba(245,158,11,0.15);
+  color: #f59e0b;
+  border-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245,158,11,0.2);
 }
 
 .chart-wrapper {
@@ -285,7 +314,7 @@ body::before {
   border-radius: var(--radius-md);
   z-index: 1;
 }
-.placeholder-icon { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.4; }
+.placeholder-icon { font-size: 3.5rem; margin-bottom: 8px; opacity: 0.8; filter: drop-shadow(0 0 10px rgba(99,102,241,0.4)); }
 .placeholder-text { font-size: 0.95rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
 .placeholder-hint { font-size: 0.8rem; color: var(--text-muted); }
 
@@ -312,7 +341,7 @@ body::before {
 /* ===== Metrics Panel ===== */
 .metrics-panel { width: 260px; flex-shrink: 0; }
 .metrics-title {
-  font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);
+  font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);
   margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .metrics-grid { display: flex; flex-direction: column; gap: 6px; }

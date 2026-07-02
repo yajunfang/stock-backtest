@@ -221,9 +221,9 @@ const UI = (() => {
 
   // --------------- Chart Type Toggle ---------------
   function buildChartTypeToggle(onChange) {
-    document.querySelectorAll('.chart-type-btn').forEach(btn => {
+    document.querySelectorAll('.chart-toggle .chart-type-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.chart-toggle .chart-type-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         if (onChange) onChange(btn.dataset.chartType);
       });

@@ -5,6 +5,28 @@
 const Chart = (() => {
   let chartInstance = null;
   let currentChartType = 'candlestick';
+  let showBollinger = false;
+  let lastKlineData = null;
+
+  function computeBollinger(klineData, window, numStd) {
+    var closes = klineData.map(function(d) { return d.close; });
+    var mid = [], upper = [], lower = [];
+    var sum = 0;
+    for (var i = 0; i < closes.length; i++) {
+      sum += closes[i];
+      if (i >= window) sum -= closes[i - window];
+      if (i >= window - 1) {
+        var ma = sum / window;
+        mid.push({ value: [klineData[i].date, ma] });
+        var sqSum = 0;
+        for (var j = i - window + 1; j <= i; j++) { sqSum += (closes[j] - ma) * (closes[j] - ma); }
+        var sd = Math.sqrt(sqSum / window);
+        upper.push({ value: [klineData[i].date, ma + numStd * sd] });
+        lower.push({ value: [klineData[i].date, ma - numStd * sd] });
+      }
+    }
+    return { mid: mid, upper: upper, lower: lower };
+  }
 
   function init(domElement) {
     if (chartInstance) chartInstance.dispose();
@@ -34,6 +56,7 @@ const Chart = (() => {
 
     const chartType = opts.chartType || currentChartType;
     currentChartType = chartType;
+    lastKlineData = klineData;
 
     const dates = klineData.map(d => d.date);
 
@@ -143,6 +166,14 @@ const Chart = (() => {
       encode: { x: 0, y: 1 }
     });
 
+    // Bollinger Bands overlay
+    if (showBollinger && klineData && klineData.length > 55) {
+      var bb = computeBollinger(klineData, 55, 2);
+      series.push({ name: 'BOLL上轨', type: 'line', data: bb.upper, symbol: 'none', lineStyle: { color: '#3b82f6', width: 1.2 }, silent: true, z: 1 });
+      series.push({ name: 'BOLL中轨', type: 'line', data: bb.mid, symbol: 'none', lineStyle: { color: '#f59e0b', width: 1.2 }, silent: true, z: 1 });
+      series.push({ name: 'BOLL下轨', type: 'line', data: bb.lower, symbol: 'none', lineStyle: { color: '#a855f7', width: 1.2 }, silent: true, z: 1 });
+    }
+
     const option = {
       backgroundColor: 'transparent',
       title: {
@@ -204,7 +235,7 @@ const Chart = (() => {
         }
       },
       legend: {
-        data: ['K线', '买入', '卖出'],
+        data: showBollinger ? ['K线', '买入', '卖出', 'BOLL上轨', 'BOLL中轨', 'BOLL下轨'] : ['K线', '买入', '卖出'],
         bottom: 55,
         left: 'center',
         itemWidth: 14,
@@ -314,5 +345,8 @@ const Chart = (() => {
     }
   }
 
-  return { init, render, switchType, clear, getInstance, dispose };
+  function toggleBollinger(show) { showBollinger = show; }
+  function isBollingerShown() { return showBollinger; }
+
+  return { init, render, switchType, clear, getInstance, dispose, toggleBollinger, isBollingerShown };
 })();

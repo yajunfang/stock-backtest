@@ -294,6 +294,23 @@ var App = (function() {
       document.getElementById('queryBtn').addEventListener('click', runBacktest);
       document.getElementById('errorClose').addEventListener('click', UI.hideError);
 
+      // Bollinger overlay toggle
+      var bollBtn = document.getElementById('bollingerBtn');
+      var bollActive = false;
+      bollBtn.addEventListener('click', function() {
+        bollActive = !bollActive;
+        if (bollActive) {
+          bollBtn.classList.add('active');
+        } else {
+          bollBtn.classList.remove('active');
+        }
+        Chart.toggleBollinger(bollActive);
+        // Re-render with current data
+        if (state.klines && state.signals) {
+          Chart.render(state.klines, state.signals, { chartType: state.chartType, stockName: state.name + ' (' + state.code + ')' });
+        }
+      });
+
       log('init done. data=' + (window.__STOCK_DATA__ ? 'OK' : 'NO') +
         ' echarts=' + (typeof echarts !== 'undefined' ? 'OK' : 'NO'));
     } catch(e) {
