@@ -158,6 +158,7 @@ var App = (function() {
 
         // 3. 渲染
         render();
+        setTimeout(function() { var c = Chart.getInstance(); if (c && !c.isDisposed()) c.resize(); }, 100);
         UI.hideLoading();
         UI.setQueryLoading(false);
         log('=== 完成 ===');
@@ -185,6 +186,7 @@ var App = (function() {
       state.signals = result.signals;
       state.metrics = result.metrics;
       render();
+      setTimeout(function() { var c = Chart.getInstance(); if (c && !c.isDisposed()) c.resize(); }, 100);
     } catch(e) {
       log('reload ERROR: ' + e.message);
       UI.showError(e.message);
@@ -248,6 +250,7 @@ var App = (function() {
       state.signals = sigResult.signals;
       state.metrics = Metrics.compute(klines, state.signals);
       render();
+      setTimeout(function() { var c = Chart.getInstance(); if (c && !c.isDisposed()) c.resize(); }, 100);
       UI.hideLoading();
       UI.setQueryLoading(false);
       log('=== 完成(在线) ===');
