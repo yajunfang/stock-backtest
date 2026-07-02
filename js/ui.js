@@ -41,7 +41,7 @@ const UI = (() => {
     const el = document.getElementById('strategyExplanation');
     const desc = document.getElementById('strategyDescText');
     el.classList.remove('hidden');
-    desc.innerHTML = `<strong>${strat.name}</strong>：${strat.desc}`;
+    desc.innerHTML = '<strong>' + strat.name + '</strong>：' + strat.desc;
   }
 
   function setActiveStrategy(strategyId) {
@@ -203,9 +203,9 @@ const UI = (() => {
       const item = document.createElement('div');
       item.className = 'autocomplete-item';
       const marketLabel = stock.market === 'us' ? '美股' : (stock.market === 'sh' ? '沪市' : '深市');
-      const localBadge = stock.hasLocal ? ' ⚡本地' : '';
+      const localBadge = stock.hasLocal ? '<span class="stock-local-badge">本地</span>' : '';
       item.innerHTML = `
-        <span class="stock-code">${stock.code}${localBadge}</span>
+        <span class="stock-code">${stock.code}</span>${localBadge}
         <span class="stock-name">${stock.name}</span>
         <span class="stock-market">${marketLabel}</span>
       `;

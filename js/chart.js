@@ -6,7 +6,22 @@ const Chart = (() => {
   let chartInstance = null;
   let currentChartType = 'candlestick';
   let showBollinger = false;
+  let showMA = false;
   let lastKlineData = null;
+
+  function computeMA(klineData, window) {
+    var closes = klineData.map(function(d) { return d.close; });
+    var result = [];
+    var sum = 0;
+    for (var i = 0; i < closes.length; i++) {
+      sum += closes[i];
+      if (i >= window) sum -= closes[i - window];
+      if (i >= window - 1) {
+        result.push({ value: [klineData[i].date, sum / window] });
+      }
+    }
+    return result;
+  }
 
   function computeBollinger(klineData, window, numStd) {
     var closes = klineData.map(function(d) { return d.close; });
@@ -76,21 +91,31 @@ const Chart = (() => {
       };
     }
 
-    // Buy signals scatter data
-    const buyData = signals
-      .filter(s => s.type === 'buy')
-      .map(s => ({
-        value: [s.date, s.price],
-        reason: s.reason
-      }));
+    // Build date -> kline map for next-day open execution
+    var klineMap = {};
+    for (var i = 0; i < klineData.length; i++) {
+      klineMap[klineData[i].date] = i;
+    }
 
-    // Sell signals scatter data
-    const sellData = signals
-      .filter(s => s.type === 'sell')
-      .map(s => ({
-        value: [s.date, s.price],
-        reason: s.reason
-      }));
+    // Buy signals: execute at NEXT day's open (white circles)
+    var buyData = [];
+    for (var i = 0; i < signals.length; i++) {
+      var s = signals[i];
+      if (s.type !== 'buy') continue;
+      var idx = klineMap[s.date];
+      var execPrice = (idx >= 0 && idx < klineData.length - 1) ? klineData[idx + 1].open : s.price;
+      buyData.push({ value: [s.date, execPrice], reason: s.reason + ' (次日开 ' + execPrice.toFixed(2) + ')' });
+    }
+
+    // Sell signals: execute at NEXT day's open (blue triangles)
+    var sellData = [];
+    for (var i = 0; i < signals.length; i++) {
+      var s = signals[i];
+      if (s.type !== 'sell') continue;
+      var idx = klineMap[s.date];
+      var execPrice = (idx >= 0 && idx < klineData.length - 1) ? klineData[idx + 1].open : s.price;
+      sellData.push({ value: [s.date, execPrice], reason: s.reason + ' (次日开 ' + execPrice.toFixed(2) + ')' });
+    }
 
     const series = [];
 
@@ -132,24 +157,20 @@ const Chart = (() => {
       });
     }
 
-    // Buy scatter
+    // Buy scatter — white circles
     series.push({
       name: '买入',
       type: 'scatter',
       data: buyData,
-      symbol: 'triangle',
-      symbolSize: 14,
-      symbolRotate: 0,
-      itemStyle: { color: COLORS.buy },
+      symbol: 'circle',
+      symbolSize: 10,
+      itemStyle: { color: '#b0723a' },
       z: 10,
-      emphasis: {
-        scale: 1.8,
-        itemStyle: { color: COLORS.buy }
-      },
+      emphasis: { scale: 1.8 },
       encode: { x: 0, y: 1 }
     });
 
-    // Sell scatter
+    // Sell scatter — blue triangles
     series.push({
       name: '卖出',
       type: 'scatter',
@@ -157,12 +178,9 @@ const Chart = (() => {
       symbol: 'triangle',
       symbolSize: 14,
       symbolRotate: 180,
-      itemStyle: { color: COLORS.sell },
+      itemStyle: { color: '#1d4ed8' },
       z: 10,
-      emphasis: {
-        scale: 1.8,
-        itemStyle: { color: COLORS.sell }
-      },
+      emphasis: { scale: 1.8, itemStyle: { color: '#2563eb' } },
       encode: { x: 0, y: 1 }
     });
 
@@ -174,13 +192,26 @@ const Chart = (() => {
       series.push({ name: 'BOLL下轨', type: 'line', data: bb.lower, symbol: 'none', lineStyle: { color: '#a855f7', width: 1.2 }, silent: true, z: 1 });
     }
 
+    // MA overlay
+    if (showMA && klineData && klineData.length > 20) {
+      var ma5 = computeMA(klineData, 5);
+      var ma20 = computeMA(klineData, 20);
+      series.push({ name: 'MA5', type: 'line', data: ma5, symbol: 'none', lineStyle: { color: '#facc15', width: 1.2 }, silent: true, z: 1 });
+      series.push({ name: 'MA20', type: 'line', data: ma20, symbol: 'none', lineStyle: { color: '#fb7185', width: 1.2 }, silent: true, z: 1 });
+    }
+
+    // Build legend data
+    var legendData = ['K线', '买入', '卖出'];
+    if (showBollinger) legendData = legendData.concat(['BOLL上轨', 'BOLL中轨', 'BOLL下轨']);
+    if (showMA) legendData = legendData.concat(['MA5', 'MA20']);
+
     const option = {
       backgroundColor: 'transparent',
       title: {
-        text: opts.stockName ? `${opts.stockName}` : '',
+        text: opts.stockName || '',
         left: 'center',
-        top: 0,
-        textStyle: { fontSize: 13, fontWeight: 600, color: '#94a3b8' }
+        top: 6,
+        textStyle: { fontSize: 14, fontWeight: 700, color: '#f1f5f9' }
       },
       tooltip: {
         trigger: 'axis',
@@ -235,8 +266,8 @@ const Chart = (() => {
         }
       },
       legend: {
-        data: showBollinger ? ['K线', '买入', '卖出', 'BOLL上轨', 'BOLL中轨', 'BOLL下轨'] : ['K线', '买入', '卖出'],
-        bottom: 55,
+        data: legendData,
+        bottom: 38,
         left: 'center',
         itemWidth: 14,
         itemHeight: 10,
@@ -245,8 +276,8 @@ const Chart = (() => {
       grid: {
         left: '3%',
         right: '3%',
-        top: chartType === 'candlestick' ? 50 : 30,
-        bottom: 80,
+        top: 15,
+        bottom: 60,
         containLabel: true
       },
       xAxis: {
@@ -287,13 +318,15 @@ const Chart = (() => {
           type: 'slider',
           start: 0,
           end: 100,
-          height: 26,
-          bottom: 30,
-          borderColor: 'rgba(255,255,255,0.06)',
-          backgroundColor: 'rgba(17,24,39,0.5)',
-          fillerColor: 'rgba(99,102,241,0.1)',
-          handleStyle: { color: '#6366f1' },
-          textStyle: { fontSize: 10, color: '#64748b' },
+          height: 18,
+          bottom: 8,
+          borderColor: 'transparent',
+          backgroundColor: 'transparent',
+          fillerColor: 'rgba(99,102,241,0.12)',
+          handleStyle: { color: '#6366f1', borderColor: '#6366f1', width: 6, height: 16 },
+          moveHandleStyle: { color: '#818cf8' },
+          textStyle: { fontSize: 9, color: '#64748b' },
+          showDetail: false,
           brushSelect: true
         },
         {
@@ -345,8 +378,10 @@ const Chart = (() => {
     }
   }
 
-  function toggleBollinger(show) { showBollinger = show; }
+  function toggleBollinger(show) { showBollinger = show; if (show) showMA = false; }
+  function toggleMA(show) { showMA = show; if (show) showBollinger = false; }
   function isBollingerShown() { return showBollinger; }
+  function isMAShown() { return showMA; }
 
-  return { init, render, switchType, clear, getInstance, dispose, toggleBollinger, isBollingerShown };
+  return { init, render, switchType, clear, getInstance, dispose, toggleBollinger, isBollingerShown, toggleMA, isMAShown };
 })();

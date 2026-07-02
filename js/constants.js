@@ -116,6 +116,7 @@ const STOCK_LIST = [
   { code: '601888', name: '中国中免', market: 'sh' },
   { code: '000725', name: '京东方A', market: 'sz' },
   { code: '600809', name: '山西汾酒', market: 'sh' },
+  { code: '688521', name: '芯原股份', market: 'sh' },
   { code: '002475', name: '立讯精密', market: 'sz' },
   { code: '600585', name: '海螺水泥', market: 'sh' },
   { code: '000001', name: '平安银行', market: 'sz' },

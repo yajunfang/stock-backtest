@@ -98,8 +98,7 @@ var App = (function() {
       stockName: state.name + ' (' + state.code + ')'
     });
 
-    document.getElementById('chartTitle').textContent =
-      state.name + ' (' + state.code + ') — 股价走势图';
+    // title handled by ECharts internally
     document.getElementById('chartPlaceholder').classList.add('hidden');
 
     if (state.metrics) {
@@ -120,7 +119,19 @@ var App = (function() {
     var raw = document.getElementById('stockInput').value.trim();
     if (!raw) { UI.showError('请输入股票代码'); return; }
 
-    var dm = detectMarket(raw);
+    // Resolve name to code if needed
+    var code = raw;
+    if (/[^\w.]/.test(raw) || /[一-鿿]/.test(raw)) {
+      // Input contains Chinese or special chars — try name match
+      var q = raw.trim().toUpperCase();
+      for (var i = 0; i < STOCK_LIST.length; i++) {
+        if (STOCK_LIST[i].code.toUpperCase() === q || STOCK_LIST[i].name.toUpperCase().includes(q)) {
+          code = STOCK_LIST[i].code;
+          break;
+        }
+      }
+    }
+    var dm = detectMarket(code);
     state.code = dm.code;
     state.market = dm.market === 'us' ? 'us' : 'cn';
 
@@ -294,21 +305,38 @@ var App = (function() {
       document.getElementById('queryBtn').addEventListener('click', runBacktest);
       document.getElementById('errorClose').addEventListener('click', UI.hideError);
 
-      // Bollinger overlay toggle
+      // BOLL & MA overlay toggles (mutually exclusive)
       var bollBtn = document.getElementById('bollingerBtn');
+      var maBtn = document.getElementById('maBtn');
       var bollActive = false;
-      bollBtn.addEventListener('click', function() {
-        bollActive = !bollActive;
-        if (bollActive) {
-          bollBtn.classList.add('active');
-        } else {
-          bollBtn.classList.remove('active');
-        }
-        Chart.toggleBollinger(bollActive);
-        // Re-render with current data
+      var maActive = false;
+
+      function reRenderOverlay() {
         if (state.klines && state.signals) {
           Chart.render(state.klines, state.signals, { chartType: state.chartType, stockName: state.name + ' (' + state.code + ')' });
         }
+      }
+
+      bollBtn.addEventListener('click', function() {
+        bollActive = !bollActive;
+        if (bollActive) {
+          maActive = false;
+          maBtn.classList.remove('active');
+        }
+        bollBtn.classList.toggle('active', bollActive);
+        Chart.toggleBollinger(bollActive);
+        reRenderOverlay();
+      });
+
+      maBtn.addEventListener('click', function() {
+        maActive = !maActive;
+        if (maActive) {
+          bollActive = false;
+          bollBtn.classList.remove('active');
+        }
+        maBtn.classList.toggle('active', maActive);
+        Chart.toggleMA(maActive);
+        reRenderOverlay();
       });
 
       log('init done. data=' + (window.__STOCK_DATA__ ? 'OK' : 'NO') +
