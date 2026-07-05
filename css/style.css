@@ -476,6 +476,7 @@ body::before {
   .header-subtitle { font-size: 0.65rem; }
 
   .card { padding: 8px 10px; margin-bottom: 6px; border-radius: var(--radius-sm); }
+  .chart-panel.card { padding: 8px 4px; }
   .input-section { padding: 8px 10px; }
 
   .input-label { font-size: 0.72rem; margin-bottom: 4px; }
@@ -496,18 +497,26 @@ body::before {
   .strategy-btn .strategy-brief { font-size: 0.58rem; }
   .strategy-explanation { font-size: 0.68rem; padding: 6px 8px; }
 
-  .input-row { flex-direction: column; gap: 8px; }
+  .input-row { flex-direction: row; gap: 6px; flex-wrap: nowrap; }
+  .input-group { flex: 1; min-width: 0; }
+  .btn-primary { width: auto; white-space: nowrap; flex-shrink: 0; }
   .period-section, .strategy-section { flex-direction: column; align-items: stretch; gap: 6px; width: 100%; }
 
-  /* BOLL/MA → horizontal above chart, centered */
-  .chart-body { flex-direction: column; }
-  .chart-overlay-btns { flex-direction: row; gap: 6px; padding: 0 0 4px 0; justify-content: center; }
-  #bollingerBtn, #maBtn { width: auto; padding: 4px 10px; font-size: 0.6rem; border-radius: 10px; }
+  /* BOLL/MA → absolute overlay on chart, top-right */
+  .chart-body { position: relative; }
+  .chart-overlay-btns {
+    position: absolute; top: 6px; right: 6px; z-index: 5;
+    flex-direction: row; gap: 4px; padding: 0;
+  }
+  #bollingerBtn, #maBtn {
+    width: auto; padding: 3px 8px; font-size: 0.58rem; border-radius: 8px;
+    background: rgba(17,24,39,0.9);
+  }
   .chart-main { width: 100%; }
 
   .chart-header { margin-bottom: 2px; gap: 4px; }
   .chart-type-btn { padding: 4px 10px; font-size: 0.65rem; }
-  .chart-wrapper { aspect-ratio: 4/3; min-height: 230px; border-radius: var(--radius-xs); }
+  .chart-wrapper { aspect-ratio: 4/3; min-height: 230px; border-radius: 0; border-left: none; border-right: none; }
 
   .metrics-panel { width: 100%; }
   .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 8px; }
@@ -536,7 +545,7 @@ body::before {
 @media (max-width: 400px) {
   .container { padding: 4px 4px 10px; }
   .card { padding: 6px 8px; }
-  .chart-wrapper { aspect-ratio: 1/1; min-height: 200px; }
+  .chart-wrapper { aspect-ratio: 1/1; min-height: 200px; border-radius: 0; }
   .strategy-btn .strategy-brief { display: none; }
   .strategy-btn { padding: 6px 3px; }
   .strategy-btn .strategy-icon { font-size: 1rem; }
