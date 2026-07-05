@@ -470,62 +470,76 @@ body::before {
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
-  .container { padding: 8px 8px 16px; }
-  .header { padding: 14px 0 10px; }
-  .header-title { font-size: 1.1rem; }
-  .header-subtitle { font-size: 0.7rem; }
+  .container { padding: 6px 6px 12px; }
+  .header { padding: 12px 0 8px; }
+  .header-title { font-size: 1.05rem; }
+  .header-subtitle { font-size: 0.65rem; }
 
-  .card { padding: 10px 12px; margin-bottom: 8px; border-radius: var(--radius-sm); }
-  .input-section { padding: 10px 12px; }
+  .card { padding: 8px 10px; margin-bottom: 6px; border-radius: var(--radius-sm); }
+  .input-section { padding: 8px 10px; }
 
-  .input-label { font-size: 0.78rem; }
-  .stock-input { padding: 8px 12px; font-size: 0.85rem; }
-  .btn { padding: 9px 18px; font-size: 0.82rem; }
+  .input-label { font-size: 0.72rem; margin-bottom: 4px; }
+  .input-label .label-icon { width: 16px; height: 16px; }
+  .stock-input { padding: 8px 10px; font-size: 0.85rem; }
+  .btn { padding: 9px 16px; font-size: 0.8rem; }
+  .btn-primary { width: 100%; text-align: center; }
 
-  .section-label { font-size: 0.8rem; }
-  .period-group { flex-wrap: wrap; }
-  .period-btn { padding: 5px 14px; font-size: 0.72rem; }
+  .section-label { font-size: 0.75rem; }
+  .section-label .label-icon { width: 16px; height: 16px; }
+  .period-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
+  .period-btn { padding: 6px 0; font-size: 0.7rem; text-align: center; border-radius: 14px; }
 
-  .strategy-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; min-width: auto; }
-  .strategy-btn { padding: 10px 6px; }
-  .strategy-btn .strategy-icon { font-size: 1.4rem; }
-  .strategy-btn .strategy-name { font-size: 0.72rem; }
-  .strategy-btn .strategy-brief { font-size: 0.62rem; }
-  .strategy-explanation { font-size: 0.7rem; padding: 8px 10px; }
+  .strategy-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; min-width: auto; width: 100%; }
+  .strategy-btn { padding: 8px 4px; }
+  .strategy-btn .strategy-icon { font-size: 1.2rem; }
+  .strategy-btn .strategy-name { font-size: 0.68rem; }
+  .strategy-btn .strategy-brief { font-size: 0.58rem; }
+  .strategy-explanation { font-size: 0.68rem; padding: 6px 8px; }
 
-  .input-row { flex-direction: column; }
-  .period-section, .strategy-section { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .input-row { flex-direction: column; gap: 8px; }
+  .period-section, .strategy-section { flex-direction: column; align-items: stretch; gap: 6px; width: 100%; }
 
-  /* BOLL/MA → horizontal above chart */
+  /* BOLL/MA → horizontal above chart, centered */
   .chart-body { flex-direction: column; }
-  .chart-overlay-btns { flex-direction: row; gap: 6px; padding: 0 0 6px 0; }
-  #bollingerBtn, #maBtn { width: auto; padding: 4px 10px; font-size: 0.62rem; border-radius: 12px; }
+  .chart-overlay-btns { flex-direction: row; gap: 6px; padding: 0 0 4px 0; justify-content: center; }
+  #bollingerBtn, #maBtn { width: auto; padding: 4px 10px; font-size: 0.6rem; border-radius: 10px; }
   .chart-main { width: 100%; }
 
-  .chart-header { margin-bottom: 4px; gap: 6px; }
-  .chart-wrapper { aspect-ratio: 4/3; min-height: 240px; }
+  .chart-header { margin-bottom: 2px; gap: 4px; }
+  .chart-type-btn { padding: 4px 10px; font-size: 0.65rem; }
+  .chart-wrapper { aspect-ratio: 4/3; min-height: 230px; border-radius: var(--radius-xs); }
 
   .metrics-panel { width: 100%; }
-  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-  .metrics-title { font-size: 0.78rem; margin-bottom: 8px; }
-  .metric-item { padding: 5px 0; }
-  .metric-label { font-size: 0.68rem; }
-  .metric-value { font-size: 0.75rem; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 8px; }
+  .metrics-title { font-size: 0.72rem; margin-bottom: 6px; }
+  .metrics-title .label-icon { width: 16px; height: 16px; }
+  .metric-item { padding: 4px 0; }
+  .metric-label { font-size: 0.65rem; }
+  .metric-value { font-size: 0.7rem; }
 
-  .placeholder-icon svg { width: 60px; height: 38px; }
-  .placeholder-text { font-size: 0.8rem; }
-  .placeholder-hint { font-size: 0.68rem; }
+  .placeholder-icon svg { width: 50px; height: 32px; }
+  .placeholder-text { font-size: 0.75rem; }
+  .placeholder-hint { font-size: 0.65rem; }
 
   .autocomplete-dropdown { min-width: auto; left: 0; right: 0; max-width: 100%; }
-  .autocomplete-item { padding: 8px 10px; }
-  .autocomplete-item .stock-code { font-size: 0.78rem; }
-  .autocomplete-item .stock-name { font-size: 0.7rem; }
+  .autocomplete-item { padding: 7px 8px; gap: 6px; }
+  .autocomplete-item .stock-code { font-size: 0.72rem; }
+  .autocomplete-item .stock-name { font-size: 0.68rem; }
+  .autocomplete-item .stock-market { font-size: 0.58rem; padding: 1px 4px; }
+  .stock-local-badge { font-size: 0.55rem; padding: 1px 3px; }
 
-  .footer { padding: 8px; font-size: 0.65rem; }
+  .footer { padding: 6px; font-size: 0.6rem; }
+  .error-banner { font-size: 0.7rem; padding: 8px 10px; }
 }
 
 /* ===== Small phone ===== */
 @media (max-width: 400px) {
-  .chart-wrapper { aspect-ratio: 1/1; min-height: 220px; }
+  .container { padding: 4px 4px 10px; }
+  .card { padding: 6px 8px; }
+  .chart-wrapper { aspect-ratio: 1/1; min-height: 200px; }
   .strategy-btn .strategy-brief { display: none; }
+  .strategy-btn { padding: 6px 3px; }
+  .strategy-btn .strategy-icon { font-size: 1rem; }
+  .strategy-btn .strategy-name { font-size: 0.65rem; }
+  .header-title { font-size: 1rem; }
 }
