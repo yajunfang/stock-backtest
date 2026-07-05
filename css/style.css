@@ -470,13 +470,13 @@ body::before {
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
-  .container { padding: 6px 6px 12px; }
+  .container { padding: 6px 6px 12px; max-width: 100%; }
+  .card { padding: 8px 10px; margin-bottom: 6px; border-radius: var(--radius-sm); }
+  .chart-panel.card { margin-left: -6px; margin-right: -6px; width: calc(100% + 12px); padding: 0; background: transparent; border: none; border-radius: 0; }
   .header { padding: 12px 0 8px; }
   .header-title { font-size: 1.05rem; }
   .header-subtitle { font-size: 0.65rem; }
 
-  .card { padding: 8px 10px; margin-bottom: 6px; border-radius: var(--radius-sm); }
-  .chart-panel.card { padding: 8px 4px; }
   .input-section { padding: 8px 10px; }
 
   .input-label { font-size: 0.72rem; margin-bottom: 4px; }
@@ -514,9 +514,9 @@ body::before {
   }
   .chart-main { width: 100%; }
 
-  .chart-header { margin-bottom: 2px; gap: 4px; }
+  .chart-header { margin-bottom: 2px; gap: 4px; padding: 4px 8px 0; }
   .chart-type-btn { padding: 4px 10px; font-size: 0.65rem; }
-  .chart-wrapper { aspect-ratio: 4/3; min-height: 230px; border-radius: 0; border-left: none; border-right: none; }
+  .chart-wrapper { aspect-ratio: 4/3; min-height: 230px; border-radius: 0; border: none; width: 100%; }
 
   .metrics-panel { width: 100%; }
   .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 8px; }
@@ -545,7 +545,7 @@ body::before {
 @media (max-width: 400px) {
   .container { padding: 4px 4px 10px; }
   .card { padding: 6px 8px; }
-  .chart-wrapper { aspect-ratio: 1/1; min-height: 200px; border-radius: 0; }
+  .chart-wrapper { aspect-ratio: 1/1; min-height: 200px; border-radius: 0; border: none; }
   .strategy-btn .strategy-brief { display: none; }
   .strategy-btn { padding: 6px 3px; }
   .strategy-btn .strategy-icon { font-size: 1rem; }
