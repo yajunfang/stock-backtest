@@ -11,7 +11,8 @@ __pycache__/
 Thumbs.db
 
 # Downloaded data (regenerated via build_data.py)
-# Keep 600519.js as demo, ignore others
+# Keep pre-computed demo data
 data/*.json
 data/*.js
 !data/600519.js
+!data/688521.js

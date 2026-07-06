@@ -267,13 +267,20 @@ var App = (function() {
   function onStrategySelect(sid) {
     if (state.strategy === sid) return;
     state.strategy = sid;
-    if (state.localData) reload();
+    if (state.localData) { reload(); return; }
+    if (state.klines) {
+      var result = runStrategy(state.strategy, state.klines);
+      state.signals = result.signals;
+      state.metrics = Metrics.compute(state.klines, state.signals);
+      render();
+    }
   }
 
   function onPeriodSelect(pid) {
     if (state.period === pid) return;
     state.period = pid;
-    if (state.localData) reload();
+    if (state.localData) { reload(); return; }
+    if (state.code) runBacktest();
   }
 
   function onChartTypeChange(ct) {
