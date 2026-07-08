@@ -16,3 +16,4 @@ data/*.json
 data/*.js
 !data/600519.js
 !data/688521.js
+!data/003018.js
