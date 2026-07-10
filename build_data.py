@@ -26,10 +26,22 @@ UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
 
 # ===================== 数据获取 =====================
 
-def http_get(url):
-    req = urllib.request.Request(url, headers={'User-Agent': UA})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode('utf-8'))
+def http_get(url, retries=3):
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={
+                'User-Agent': UA,
+                'Referer': 'https://quote.eastmoney.com/'
+            })
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode('utf-8'))
+        except Exception as e:
+            if attempt < retries - 1:
+                wait = (attempt + 1) * 3
+                print(f'    重试 {attempt+2}/{retries} (等待{wait}s)...')
+                time.sleep(wait)
+            else:
+                raise e
 
 
 def fetch_a_share(code, market='sh'):
