@@ -99,6 +99,7 @@ const STOCK_LIST = [
   { code: '600036', name: '招商银行', market: 'sh' },
   { code: '000333', name: '美的集团', market: 'sz' },
   { code: '600206', name: '有研新材', market: 'sh' },
+  { code: '603061', name: '金海通', market: 'sh' },
   { code: '600276', name: '恒瑞医药', market: 'sh' },
   { code: '601166', name: '兴业银行', market: 'sh' },
   { code: '000651', name: '格力电器', market: 'sz' },
