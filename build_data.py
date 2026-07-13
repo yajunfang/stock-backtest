@@ -572,10 +572,10 @@ def build_stock(raw_code):
 def save_stock(stock):
     os.makedirs('data', exist_ok=True)
 
-    # JSON 文件
+    # JSON 文件（格式化，方便阅读）
     filepath = f'data/{stock["code"]}.json'
     with open(filepath, 'w', encoding='utf-8') as f:
-        json.dump(stock, f, ensure_ascii=False, separators=(',', ':'))
+        json.dump(stock, f, ensure_ascii=False, indent=2)
     size_kb = os.path.getsize(filepath) / 1024
     print(f'  [JSON] {filepath} ({size_kb:.0f} KB)')
 
